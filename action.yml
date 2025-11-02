@@ -31,14 +31,9 @@ inputs:
     description: 'Commit message for PDF updates'
     required: false
     default: 'Update PDFs'
-  
-  wordcount:
-    description: 'Update wordcount in TeX files'
-    required: false
-    default: 'true'
 
   wordcount-files:
-    description: 'Comma-separated list of top-level TeX files to update wordcount for (relative paths)'
+    description: 'Comma-separated list of top-level TeX files to update wordcount for (leave empty to disable)'
     required: false
     default: ''
 
@@ -117,9 +112,8 @@ runs:
       shell: bash
       run: |
         WC_TO_UPDATE=""
-        UPDATE_WC="${{ inputs.wordcount }}"
         
-        if [[ "$UPDATE_WC" == "true" ]] && [[ "${{ inputs.wordcount-files }}" != "" ]]; then
+        if [[ "${{ inputs.wordcount-files }}" != "" ]]; then
           IFS=',' read -ra WC_FILES <<< "${{ inputs.wordcount-files }}"
           CHANGED="${{ steps.changed.outputs.all_changed_files }}"
           
